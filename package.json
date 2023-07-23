@@ -1,0 +1,26 @@
+{
+  "name": "one-stop",
+  "version": "0.0.1",
+  "description": "simple state manager",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thipages/one-stop.git"
+  },
+  "keywords": [
+    "state",
+    "manager",
+    "simple",
+    "proxy",
+    "subscription"
+  ],
+  "author": "Thierry PAGES",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thipages/one-stop/issues"
+  },
+  "homepage": "https://github.com/thipages/one-stop#readme"
+}
