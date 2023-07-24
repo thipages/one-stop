@@ -1,10 +1,12 @@
 export default function (initialState) {
-  // retrieve functions from the initial state
+  // Sepatate root functions and non functions (model) within the initial state
   const functions = {}
+  const model = {}
   for (const [key, value] of Object.entries (initialState)) {
       if (typeof value === 'function') {
         functions[key] = value
-        delete initialState[key]
+      } else {
+        model[key] = value
       }
   }
   const subs = new Set
@@ -12,7 +14,7 @@ export default function (initialState) {
     subs.add(callback)
     return () => subs.delete(callback)
   }
-  const state = structuredClone(initialState)
+  const state = structuredClone(model)
   const get = new Proxy(state, readOnlyProxy())
   const set = new Proxy(state, trackerProxy(subs))
   const fn = {}

@@ -8,26 +8,34 @@ const initialState = {
   },
   increment (inc) {
     this.count += inc
+  },
+  isZeroCount() {
+    return this.count === 0
   }
 }
 const mockCallback = jest.fn(x => true);
 let shop
-beforeEach(() => {
-  shop = oneStop(initialState)
-  
-});
 describe("Basics operations", () => {
   it('should update a non-nested primitive', () => {
+    shop = oneStop(initialState)
     const {get, fn} = shop
-    shop.fn.increment(2)
-    expect(shop.get.count).toBe(2)
+    fn.increment(2)
+    expect(get.count).toBe(2)
 
   })
   it('should update an array', () => {
+    shop = oneStop(initialState)
     const {get, set, subscribe} = shop
     subscribe(mockCallback)
     set.array.push(4)
     expect(get.array.length).toBe(4)
-    expect(mockCallback.mock.calls).toHaveLength(2);
+    // Two calls should occur : insertion + length property changes
+    expect(mockCallback.mock.calls).toHaveLength(2)
+  })
+  it('can use fn for calling getters', () => {
+    shop = oneStop(initialState)
+    const {fn} = shop
+    const isZero = fn.isZeroCount()
+    expect(isZero).toBe(true)
   })
  })
