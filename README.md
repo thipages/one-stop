@@ -2,11 +2,11 @@
 A simple state manager
 
 ## Principle
-`one-stop` wraps an object (which can include root functions) and returns a `{get, set, subscribe}` object
+`one-stop` wraps an object (which can include root functions) and returns a `{get, set, fn ,subscribe}` object
 - `get` function allows to retrieve (nested) object properties in read-only mode
 - `set` function allows to update object properties
 - `fn` function to execute root functions returning or not a value
-- `subscribe` function triggers a callback (its argument) for each `set` operation
+- `subscribe` function triggers a callback (its argument) for each `set` operation (see limitations)
 
 ## Example
 
@@ -39,4 +39,4 @@ console.log(fn.isZeroCount()) // prints true
   - pushing a value to an array will trigger two callbacks (insertion + length property changes)
   - sorting an array will trigger many callbacks
 
-This latter limitation can be a performance issue, also a `debounce` function implementation may be useful
+This latter limitation can lead to performance issues; Also a `debounce` function implementation may be useful to avoid multiple sequential calls treatment for one set operation.
