@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "description": "simple state manager",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/thipages/one-stop/issues"
   },
-  "homepage": "https://github.com/thipages/one-stop#readme"
+  "homepage": "https://github.com/thipages/one-stop#readme",
+  "devDependencies": {
+    "jest": "^29.6.1"
+  }
 }
