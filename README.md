@@ -5,6 +5,7 @@ A simple state manager
 `one-stop` wraps an object (which can include root functions) and returns a `{get, set, subscribe}` object
 - `get` function allows to retrieve (nested) object properties in read-only mode
 - `set` function allows to update object properties
+- `fn` function to execute root functions returning or not a value
 - `subscribe` function triggers a callback (its argument) for each `set` operation
 
 ## Example
@@ -16,13 +17,17 @@ const initialState = {
   array : ['one'],
   increment (increment) {
     this.count += increment
+  },
+  isZeroCount() {
+    return this.count === 0
   }
 }
-const {get, set, subscribe} = oneStop(initialState)
+const {get, set, fn, subscribe} = oneStop(initialState)
 subscribe(() => console.log('state updated'))
 set.increment(1) // triggers the subscription
 set.array.push('two') // triggers the subscription
 console.log(get.count) // prints 1
+console.log(fn.isZeroCount()) // prints true
 
 ```
 
