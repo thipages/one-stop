@@ -16,16 +16,18 @@ beforeEach(() => {
   shop = oneStop(initialState)
   
 });
-describe("Check set/get", () => {
+describe("Basics operations", () => {
   it('should update a non-nested primitive', () => {
-    shop.set.increment(2)
+    const {get, fn} = shop
+    shop.fn.increment(2)
     expect(shop.get.count).toBe(2)
 
   })
   it('should update an array', () => {
-    shop.subscribe(mockCallback)
-    shop.set.array.push(4)
-    expect(shop.get.array.length).toBe(4)
+    const {get, set, subscribe} = shop
+    subscribe(mockCallback)
+    set.array.push(4)
+    expect(get.array.length).toBe(4)
     expect(mockCallback.mock.calls).toHaveLength(2);
   })
  })

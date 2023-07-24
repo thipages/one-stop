@@ -1,5 +1,5 @@
 export default function (initialState) {
-  // retrieve functions/actions from the initial state
+  // retrieve functions from the initial state
   const functions = {}
   for (const [key, value] of Object.entries (initialState)) {
       if (typeof value === 'function') {
@@ -15,13 +15,14 @@ export default function (initialState) {
   const state = structuredClone(initialState)
   const get = new Proxy(state, readOnlyProxy())
   const set = new Proxy(state, trackerProxy(subs))
-  // Add again the removed function to set function
+  const fn = {}
+  // Add again the removed functions to set function
   for (const [key, value] of Object.entries (functions)) {
-    set[key] = function () {
-          return value.apply(state, arguments) 
+    fn[key] = function () {
+        return value.apply(state, arguments) 
     }
   }
-  return { set, get, subscribe}
+  return { get, set, fn, subscribe}
 }
 function readOnlyProxy () {
   return {
