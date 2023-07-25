@@ -1,6 +1,6 @@
 {
   "name": "one-stop",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "simple state manager",
   "main": "src/index.js",
   "type": "module",

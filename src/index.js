@@ -15,8 +15,8 @@ export default function (initialState) {
     return () => subs.delete(callback)
   }
   const state = structuredClone(model)
-  const get = new Proxy(state, readOnlyProxy())
-  const set = new Proxy(state, trackerProxy(subs))
+  const ro = new Proxy(state, readOnlyProxy())
+  const rw = new Proxy(state, trackerProxy(subs))
   const fn = {}
   // Add again the removed functions to set function
   for (const [key, value] of Object.entries (functions)) {
@@ -24,7 +24,7 @@ export default function (initialState) {
         return value.apply(state, arguments) 
     }
   }
-  return { get, set, fn, subscribe}
+  return { ro, rw, fn, subscribe}
 }
 function readOnlyProxy () {
   return {
