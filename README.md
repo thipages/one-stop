@@ -28,6 +28,9 @@ set.array.push('two') // prints "state updated"
 fn.increment(1) // prints "state updated"
 console.log(get.count) // prints "1"
 console.log(fn.isZeroCount()) // prints "true"
+console.log(get.foo) // prints "undefined"
+get.count = 1 // throws a TypeError (cannot update the readonly model)
+set.foo = 1 // throws a TypeError (cannot create a new property)
 
 ```
 

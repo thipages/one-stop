@@ -15,6 +15,7 @@ export default function (initialState) {
     return () => subs.delete(callback)
   }
   const state = structuredClone(model)
+  Object.preventExtensions(state)
   const get = new Proxy(state, readOnlyProxy())
   const set = new Proxy(state, trackerProxy(subs))
   const fn = {}

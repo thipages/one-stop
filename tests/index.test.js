@@ -20,13 +20,11 @@ beforeEach (
     shop = oneStop(initialState)
   }
 )
-describe("Basics operations", () => {
+describe("One bag tests", () => {
   it('should update a non-nested primitive', () => {
-    
     const {get, fn} = shop
     fn.increment(2)
     expect(get.count).toBe(2)
-
   })
   it('should update an array', () => {
     const {get, set, subscribe} = shop
@@ -41,14 +39,26 @@ describe("Basics operations", () => {
     const isZero = fn.isZeroCount()
     expect(isZero).toBe(true)
   })
-  it('throws an error if one try to update the readonly model (get)git add gi', () => {
+  it('throws an error if one try to update the readonly model (get function)', () => {
     expect.assertions(1)
     const {get} = shop
     try {
       get.count = 1
     } catch (error) {
-      console.log('error',error.name)
       expect(error.name).toBe('TypeError')
     }
+  })
+  it('prevents new property creation/assignments', () => {
+    expect.assertions(1)
+    const {set} = shop
+    try {
+      set.foo = 1
+    } catch (error) {
+      expect(error.name).toBe('TypeError')
+    }
+  })
+  it('should return undefined while getting an unknown property', () => {
+    const {get} = shop
+    expect(get.foo).toBe(undefined)
   })
  })
