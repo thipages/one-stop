@@ -15,7 +15,6 @@ export default function (initialState) {
     return () => subs.delete(callback)
   }
   const state = structuredClone(model)
-  Object.preventExtensions(state)
   const get = new Proxy(state, readOnlyProxy())
   const set = new Proxy(state, trackerProxy(subs))
   const fn = {}
@@ -50,6 +49,7 @@ function trackerProxy (subscriptions) {
         : target[key]
     },
     set : function (target, key, value) {
+      throwIfReferenceError(target, key)
       target[key]=value
       for (const sub of Array.from(subscriptions)) {
         sub()
@@ -59,5 +59,12 @@ function trackerProxy (subscriptions) {
     deleteProperty: function() {
       return false
     }
+  }
+}
+function throwIfReferenceError(target, key) {
+  // https://stackoverflow.com/questions/39880064/proxy-index-gets-converted-to-string
+  if (Array.isArray(target) && (key === 'length' || /\d+/.test(key))) return 
+  if (!target.hasOwnProperty(key)) {
+    throw new ReferenceError('Unknown property: '+key);
   }
 }

@@ -15,6 +15,9 @@ import oneStop from 'one-stop'
 const initialState = {
   count:0,
   array : ['one'],
+  nest : {
+    count : 10
+  },
   increment (increment) {
     this.count += increment
   },
@@ -24,13 +27,20 @@ const initialState = {
 }
 const {get, set, fn, subscribe} = oneStop(initialState)
 subscribe(() => console.log('state updated'))
+// update model from 'set' or 'fn' functions
 set.array.push('two') // prints "state updated"
 fn.increment(1) // prints "state updated"
-console.log(get.count) // prints "1"
+// returns model properties or computed values from 'get' or 'fn' functions
 console.log(fn.isZeroCount()) // prints "true"
+console.log(get.count) // prints "1"
+console.log(get.nest.count) // prints "10"
 console.log(get.foo) // prints "undefined"
-get.count = 1 // throws a TypeError (cannot update the readonly model)
-set.foo = 1 // throws a TypeError (cannot create a new property)
+// throws a TypeError (cannot update the readonly model)
+get.count = 1
+get.nest.count = 1
+// throws a TypeError (cannot create a new property)
+set.foo = 1
+set.nest.foo = 1
 
 ```
 

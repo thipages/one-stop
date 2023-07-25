@@ -54,7 +54,16 @@ describe("One bag tests", () => {
     try {
       set.foo = 1
     } catch (error) {
-      expect(error.name).toBe('TypeError')
+      expect(error.name).toBe('ReferenceError')
+    }
+  })
+  it('prevents new nnested property creation/assignments', () => {
+    expect.assertions(1)
+    const {set} = shop
+    try {
+      set.nest.foo = 1
+    } catch (error) {
+      expect(error.name).toBe('ReferenceError')
     }
   })
   it('should return undefined while getting an unknown property', () => {
