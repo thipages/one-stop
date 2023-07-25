@@ -41,7 +41,7 @@ describe("Basics operations", () => {
     const isZero = fn.isZeroCount()
     expect(isZero).toBe(true)
   })
-  it('throws an error if one try to update the readonly model (get)', () => {
+  it('throws an error if one try to update the readonly model (get)git add gi', () => {
     expect.assertions(1)
     const {get} = shop
     try {
