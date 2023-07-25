@@ -8,6 +8,11 @@ A simple state manager
 - `fn` function to execute root functions returning or not a value
 - `subscribe` function triggers a callback (its argument) for each `rw` operation (see limitations)
 
+## Why having both ro and rw functions ?
+`rw` should be enough ...
+
+Part of an application using `one-stop` may want to expose only read-only state (e.g. a web view)
+
 ## Example
 
 ```javascript
@@ -33,6 +38,7 @@ fn.increment(1) // prints "state updated"
 // returns model properties or computed values from 'ro' or 'fn' functions
 console.log(fn.isZeroCount()) // prints "true"
 console.log(ro.count) // prints "1"
+console.log(rw.count) // prints "1" (same as above)
 console.log(ro.nest.count) // prints "10"
 console.log(ro.foo) // prints "undefined"
 // throws a TypeError (cannot update the readonly model)
