@@ -24,8 +24,8 @@ const initialState = {
 }
 const {get, set, fn, subscribe} = oneStop(initialState)
 subscribe(() => console.log('state updated'))
-set.increment(1) // prints "state updated"
 set.array.push('two') // prints "state updated"
+fn.increment(1) // prints "state updated"
 console.log(get.count) // prints "1"
 console.log(fn.isZeroCount()) // prints "true"
 
