@@ -31,7 +31,7 @@ function readOnlyProxy () {
     get(target, key) {
       return typeof target[key] === 'object' && target[key] !== null
         ? new Proxy(target[key], readOnlyProxy())
-        : target[key]
+        : Reflect.get(target,key)
     },
     set : function () {
       return false
@@ -46,11 +46,11 @@ function trackerProxy (subscriptions) {
     get(target, key) {
       return typeof target[key] === 'object' && target[key] !== null
         ? new Proxy(target[key], trackerProxy(subscriptions))
-        : target[key]
+        : Reflect.get(target,key)
     },
-    set : function (target, key, value) {
+    set : function (target, key, value, receiver) {
       throwIfReferenceError(target, key)
-      target[key]=value
+      Reflect.set(target, key, value, receiver)
       for (const sub of Array.from(subscriptions)) {
         sub()
       }
