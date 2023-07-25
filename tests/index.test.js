@@ -41,4 +41,14 @@ describe("Basics operations", () => {
     const isZero = fn.isZeroCount()
     expect(isZero).toBe(true)
   })
+  it('throws an error if one try to update the readonly model (get)', () => {
+    expect.assertions(1)
+    const {get} = shop
+    try {
+      get.count = 1
+    } catch (error) {
+      console.log('error',error.name)
+      expect(error.name).toBe('TypeError')
+    }
+  })
  })
