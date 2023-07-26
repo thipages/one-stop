@@ -2,7 +2,7 @@
 A simple state manager
 
 ## Principle
-`one-stop` wraps an object (which can include root functions) and returns a `{ro, rw, fn ,subscribe}` object
+`one-stop` wraps an object (which can include root functions) and returns a `{ro, rw, fn}` object
 - `ro` read-only model property allows to read (nested) properties
 - `rw` read or write property allows to update or read (nested) object properties
 - `fn` function to execute root functions returning or not a value
@@ -34,7 +34,7 @@ const initialState = {
   }
 }
 const notifyChanges = () => console.log('state updated')
-const {ro, rw, fn, subscribe} = oneStop(initialState, notifyChanges)
+const {ro, rw, fn} = oneStop(initialState, notifyChanges)
 // update model from 'rw' or 'fn' functions
 rw.array.push('two') // prints "state updated"
 fn.increment(1) // prints "state updated"
