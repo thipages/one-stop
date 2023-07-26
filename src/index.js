@@ -29,10 +29,10 @@ function readOnlyProxy () {
         ? new Proxy(target[key], readOnlyProxy())
         : Reflect.get(target,key)
     },
-    set : function () {
+    set () {
       return false
     },
-    deleteProperty: function() {
+    deleteProperty () {
       return false;
     }
   }
@@ -44,7 +44,7 @@ function trackerProxy (notifyChanges) {
         ? new Proxy(target[key], trackerProxy(notifyChanges))
         : Reflect.get(target,key)
     },
-    set : function (target, key, value, receiver) {
+    set (target, key, value, receiver) {
       throwIfReferenceError(target, key)
       Reflect.set(target, key, value, receiver)
       notifyChanges()
