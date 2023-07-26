@@ -17,7 +17,7 @@ const mockCallback = jest.fn(x => true);
 let shop
 beforeEach (
   () => {
-    shop = oneStop(initialState)
+    shop = oneStop(initialState, mockCallback)
   }
 )
 describe("One bag tests", () => {
@@ -27,13 +27,12 @@ describe("One bag tests", () => {
     expect(rw.count).toBe(2)
   })
   it('should update an array', () => {
-    const {rw, subscribe} = shop
-    subscribe(mockCallback)
+    const {rw} = shop
     rw.array.push(4)
     expect(rw.array.length).toBe(4)
-    // Two calls should occur : insertion + length property changes
-    expect(mockCallback.mock.calls).toHaveLength(2)
-  })
+    // Two calls should occur : insertion + length property, but debounced, so 1
+    expect(mockCallback.mock.calls).toHaveLength(1)
+  }, 300)
   it('can use fn for calling getters', () => {
     const {fn} = shop
     const isZero = fn.isZeroCount()

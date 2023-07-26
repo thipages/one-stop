@@ -1,4 +1,4 @@
-export default function (initialState) {
+export default function (initialState, notifyChanges) {
   // Sepatate root functions and non functions (model) within the initial state
   const functions = {}
   const model = {}
@@ -9,14 +9,10 @@ export default function (initialState) {
         model[key] = value
       }
   }
-  const subs = new Set
-  const subscribe = callback => {
-    subs.add(callback)
-    return () => subs.delete(callback)
-  }
+  const notify = notifyChanges ? debounce(notifyChanges) : noop
   const state = structuredClone(model)
   const ro = new Proxy(state, readOnlyProxy())
-  const rw = new Proxy(state, trackerProxy(subs))
+  const rw = new Proxy(state, trackerProxy(notify))
   const fn = {}
   // Add again the removed functions to set function
   for (const [key, value] of Object.entries (functions)) {
@@ -24,7 +20,7 @@ export default function (initialState) {
         return value.apply(state, arguments) 
     }
   }
-  return { ro, rw, fn, subscribe}
+  return { ro, rw, fn }
 }
 function readOnlyProxy () {
   return {
@@ -41,19 +37,17 @@ function readOnlyProxy () {
     }
   }
 }
-function trackerProxy (subscriptions) {
+function trackerProxy (notifyChanges) {
   return {
     get(target, key) {
       return typeof target[key] === 'object' && target[key] !== null
-        ? new Proxy(target[key], trackerProxy(subscriptions))
+        ? new Proxy(target[key], trackerProxy(notifyChanges))
         : Reflect.get(target,key)
     },
     set : function (target, key, value, receiver) {
       throwIfReferenceError(target, key)
       Reflect.set(target, key, value, receiver)
-      for (const sub of Array.from(subscriptions)) {
-        sub()
-      }
+      notifyChanges()
       return true
     },
     deleteProperty: function() {
@@ -61,10 +55,29 @@ function trackerProxy (subscriptions) {
     }
   }
 }
+function noop () {}
 function throwIfReferenceError(target, key) {
   // https://stackoverflow.com/questions/39880064/proxy-index-gets-converted-to-string
   if (Array.isArray(target) && (key === 'length' || /\d+/.test(key))) return 
   if (!target.hasOwnProperty(key)) {
     throw new ReferenceError('Unknown property: '+key);
+  }
+}
+function debounce(fn, timeout = 300) {
+  const start = () => {
+    timer = setInterval(()=> {
+      if (calls> 1) {
+        fn()
+        clearInterval(timer)
+      }
+      calls = 0
+    }, timeout)
+  }
+  let timer, calls = 0
+  return () => {
+    calls++
+    if (timer) return
+    start()
+    fn()
   }
 }
