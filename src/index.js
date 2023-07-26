@@ -9,7 +9,7 @@ export default function (initialState, notifyChanges) {
         model[key] = value
       }
   }
-  const notify = notifyChanges ? debounce(notifyChanges) : noop
+  const notify = notifyChanges ? throttle(notifyChanges) : noop
   const state = structuredClone(model)
   const ro = new Proxy(state, readOnlyProxy())
   const rw = new Proxy(state, trackerProxy(notify))
@@ -63,7 +63,12 @@ function throwIfReferenceError(target, key) {
     throw new ReferenceError('Unknown property: '+key);
   }
 }
-function debounce(fn, timeout = 300) {
+/*
+Once a notification occurs
+  - call the function immediately
+  - call it again after timeout if it has been called again meanwhile
+*/
+function throttle(fn, timeout = 300) {
   const start = () => {
     timer = setInterval(()=> {
       if (calls> 1) {

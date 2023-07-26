@@ -9,7 +9,7 @@ A simple state manager
 
 `one-stop` accepts two arguments
 - the wrapped object
-- a callback function which notify any changes (debounced at 300ms interval)
+- a callback function which notify any changes (with a 300ms throttle)
 
 ## Why having both ro and rw functions ?
 `rw` should be enough ...
