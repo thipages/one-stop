@@ -9,7 +9,7 @@ export default function (initialState, notifyChanges) {
         model[key] = value
       }
   }
-  const notify = notifyChanges ? throttle(notifyChanges) : noop
+  const notify = notifyChanges ? postpone(notifyChanges) : noop
   const state = structuredClone(model)
   const ro = new Proxy(state, readOnlyProxy())
   const rw = new Proxy(state, trackerProxy(notify))
@@ -68,21 +68,15 @@ Once a notification occurs
   - call the function immediately
   - call it again after timeout if it has been called again meanwhile
 */
-function throttle(fn, timeout = 300) {
-  const start = () => {
-    timer = setInterval(()=> {
-      if (calls> 1) {
-        fn()
-        clearInterval(timer)
-      }
-      calls = 0
-    }, timeout)
-  }
-  let timer, calls = 0
+function postpone(fn, timeout = 100) {
+  let timer
   return () => {
-    calls++
     if (timer) return
-    start()
-    fn()
+    timer = setTimeout (
+      () => {
+        clearTimeout(timer)
+        fn()
+      }, timeout
+    )
   }
 }
