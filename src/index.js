@@ -63,11 +63,6 @@ function throwIfReferenceError(target, key) {
     throw new ReferenceError('Unknown property: '+key);
   }
 }
-/*
-Once a notification occurs
-  - call the function immediately
-  - call it again after timeout if it has been called again meanwhile
-*/
 function postpone(fn, timeout = 100) {
   let timer
   return () => {
