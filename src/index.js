@@ -1,7 +1,11 @@
-export default function (initialState, notifyChanges) {
-  // Sepatate root functions and non functions (model) within the initial state
+const defaultOptions = {
+  timeout : 50
+}
+export default function (initialState, notifyChanges, options = {}) {
+  const o = Object.assign ( {}, defaultOptions, options)
   const functions = {}
   const model = {}
+  // Extract root functions from model
   for (const [key, value] of Object.entries (initialState)) {
       if (typeof value === 'function') {
         functions[key] = value
@@ -9,12 +13,12 @@ export default function (initialState, notifyChanges) {
         model[key] = value
       }
   }
-  const notify = notifyChanges ? postpone(notifyChanges) : noop
+  const notify = notifyChanges ? postpone(notifyChanges, o.timeout) : noop
   const state = structuredClone(model)
   const ro = new Proxy(state, readOnlyProxy())
   const rw = new Proxy(state, trackerProxy(notify))
   const fn = {}
-  // Add again the removed functions to set function
+  // add root functions in fn
   for (const [key, value] of Object.entries (functions)) {
     fn[key] = function () {
         return value.apply(state, arguments) 
@@ -63,7 +67,7 @@ function throwIfReferenceError(target, key) {
     throw new ReferenceError('Unknown property: '+key);
   }
 }
-function postpone(fn, timeout = 100) {
+function postpone(fn, timeout) {
   let timer
   return () => {
     if (timer) return
