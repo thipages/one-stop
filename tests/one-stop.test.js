@@ -91,6 +91,7 @@ describe("one-stop tests", () => {
     jest.runAllTimers();
     expect(mock).toHaveBeenCalledTimes(1);
   })
+  // https://jestjs.io/fr/docs/timer-mocks
   it('should receive two nofifications after an array push', () => {
     const mock = jest.fn();
     shop = oneStop(model, mock, {timeout: 0})

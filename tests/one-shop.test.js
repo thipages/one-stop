@@ -27,6 +27,7 @@ describe("one-shop tests", () => {
     rw.count = 1
     expect(rw.count).toBe(1)
   })
+  // https://jestjs.io/fr/docs/timer-mocks
   it('should receive one nofification after updates done on two model', () => {
     const mock = jest.fn();
     shop = oneShop(models, mock)
