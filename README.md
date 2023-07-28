@@ -35,19 +35,22 @@ const initialState = {
 }
 const notifyChanges = () => console.log('state updated')
 const {ro, rw, fn} = oneStop(initialState, notifyChanges)
-// update model from 'rw' or 'fn' functions
+// WRITING
 rw.array.push('two') // prints "state updated"
 fn.increment(1) // prints "state updated"
-// returns model properties or computed values from 'ro' or 'fn' functions
-console.log(fn.isZeroCount()) // prints "true"
-console.log(ro.count) // prints "1"
-console.log(rw.count) // prints "1" (same as above)
-console.log(ro.nest.count) // prints "10"
-console.log(ro.foo) // prints "undefined"
-// throws a TypeError (cannot update the readonly model)
+// READING
+console.log(
+  fn.isZeroCount(), // "true"
+  ro.count, // 1
+  rw.count, // 1 (same as above)
+  ro.nest.count, 10
+  ro.foo, // undefined
+)
+// THROWING TypeError
+// Cannot update the readonly model
 ro.count = 1
 ro.nest.count = 1
-// throws a TypeError (cannot create a new property)
+// Cannot create a new property
 rw.foo = 1
 rw.nest.foo = 1
 
