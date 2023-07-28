@@ -1,5 +1,4 @@
 import oneStop from './../src/index.js'
-import {jest} from '@jest/globals'
 const initialState = {
   count:0,
   array : [1, 2, 3],
@@ -20,21 +19,33 @@ beforeEach (
   }
 )
 describe("One bag tests", () => {
-  it('should update a non-nested primitive', () => {
-    const {rw, fn} = shop
+  it('should update a non-nested primitive via rw', () => {
+    const {ro, rw} = shop
+    rw.count = 1
+    expect(rw.count).toBe(1)
+    expect(ro.count).toBe(1)
+  })
+  it('should update a nested primitive via rw', () => {
+    const {ro, rw} = shop
+    rw.nest.count = 1
+    expect(rw.nest.count).toBe(1)
+    expect(ro.nest.count).toBe(1)
+  })
+  it('sshould update a primitive via fn', () => {
+    const {ro, fn} = shop
     fn.increment(2)
-    expect(rw.count).toBe(2)
+    expect(ro.count).toBe(2)
   })
   it('should update an array', (done) => {
-    // override beforeEach in order ti manage callback test
+    // override beforeEach in order to manage callback test
     shop = oneStop(initialState, ()=>{
       done()
     })
     const {rw} = shop
     rw.array.push(4)
-    expect(rw.array.length).toBe(4)    
+    expect(rw.array.length).toBe(4)
   })
-  it('can use fn for calling getters', () => {
+  it('reads via a fn getter function', () => {
     const {fn} = shop
     const isZero = fn.isZeroCount()
     expect(isZero).toBe(true)
