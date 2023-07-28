@@ -1,19 +1,34 @@
 const defaultOptions = {
   timeout : 50
 }
-export default function (initialState, notifyChanges, options = {}) {
+export function oneShop (models, notifyChanges, options = {}) {
+  const notify = typeof notifyChanges === 'function'
+    ? postpone (notifyChanges, options.timeout || defaultOptions.timeout)
+    : null
+  const o = Object.assign({timeout:0}, options)
+  const updatedModels = {}
+  for (const [key, model] of Object.entries(models)) {
+    updatedModels[key] = oneStop(model, notify, o)
+  }
+  return updatedModels
+}
+export default function oneStop (initialModel, notifyChanges, options = {}) {
   const o = Object.assign ( {}, defaultOptions, options)
   const functions = {}
   const model = {}
   // Extract root functions from model
-  for (const [key, value] of Object.entries (initialState)) {
+  for (const [key, value] of Object.entries (initialModel)) {
       if (typeof value === 'function') {
         functions[key] = value
       } else {
         model[key] = value
       }
   }
-  const notify = notifyChanges ? postpone(notifyChanges, o.timeout) : noop
+  const notify = typeof notifyChanges !== 'function'
+    ? noop
+    : o.timeout === 0
+        ? notifyChanges
+        : postpone(notifyChanges, o.timeout)
   const state = structuredClone(model)
   const ro = new Proxy(state, readOnlyProxy())
   const rw = new Proxy(state, trackerProxy(notify))

@@ -1,5 +1,6 @@
-import oneStop from './../src/index.js'
-const initialState = {
+import { jest } from '@jest/globals';
+import oneStop from '../src/index.js'
+const model = {
   count:0,
   array : [1, 2, 3],
   nest : {
@@ -15,10 +16,10 @@ const initialState = {
 let shop
 beforeEach (
   () => {
-    shop = oneStop(initialState)
+    shop = oneStop(model)
   }
 )
-describe("One bag tests", () => {
+describe("one-stop tests", () => {
   it('should update a non-nested primitive via rw', () => {
     const {ro, rw} = shop
     rw.count = 1
@@ -36,9 +37,9 @@ describe("One bag tests", () => {
     fn.increment(2)
     expect(ro.count).toBe(2)
   })
-  it('should update an array', (done) => {
+  it('should update an array via rw', (done) => {
     // override beforeEach in order to manage callback test
-    shop = oneStop(initialState, ()=>{
+    shop = oneStop(model, ()=>{
       done()
     })
     const {rw} = shop
@@ -80,5 +81,23 @@ describe("One bag tests", () => {
   it('should return undefined while getting an unknown property', () => {
     const {ro} = shop
     expect(ro.foo).toBe(undefined)
+  })
+  it('should receive one nofification after an array push', () => {
+    const mock = jest.fn();
+    shop = oneStop(model, mock)
+    const {rw} = shop
+    jest.useFakeTimers();
+    rw.array.push(4)
+    jest.runAllTimers();
+    expect(mock).toHaveBeenCalledTimes(1);
+  })
+  it('should receive two nofifications after an array push', () => {
+    const mock = jest.fn();
+    shop = oneStop(model, mock, {timeout: 0})
+    const {rw} = shop
+    jest.useFakeTimers();
+    rw.array.push(4)
+    jest.runAllTimers();
+    expect(mock).toHaveBeenCalledTimes(2);
   })
  })

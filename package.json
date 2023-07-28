@@ -1,6 +1,6 @@
 {
   "name": "one-stop",
-  "version": "0.6",
+  "version": "0.7",
   "description": "simple state manager",
   "main": "src/index.js",
   "type": "module",
@@ -17,7 +17,7 @@
     "manager",
     "simple",
     "proxy",
-    "subscription"
+    "notification"
   ],
   "author": "Thierry PAGES",
   "license": "MIT",
