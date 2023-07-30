@@ -1,6 +1,7 @@
 const defaultOptions = {
     timeout: 50,
-    strictly: 1 // 1 or 2 allowed
+    readOnly: false,
+    strict: false
 }
 const RM = 'readMode'
 const WM = 'writeMode'

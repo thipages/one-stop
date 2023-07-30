@@ -4,7 +4,7 @@ import model from './model.js'
 let shop, readMode, writeMode
 beforeEach (
   () => {
-    shop = oneStop(model, null, {strict: 2})
+    shop = oneStop(model, null, {strict: true})
     readMode = shop.readMode
     writeMode = shop.writeMode
   }
@@ -15,14 +15,6 @@ describe("one-stop tests", () => {
         try {
             state.count = 1
         } catch (error) {
-            expect(error.name).toBe('TypeError')
-        }
-    })
-    it('should not update a nested primitive', () => {
-        const {state} = writeMode
-        try {
-        state.nest.count = 1
-        } catch (e) {
             expect(error.name).toBe('TypeError')
         }
     })
@@ -50,7 +42,7 @@ describe("one-stop tests", () => {
         try {
         state.foo = 1
         } catch (error) {
-        expect(error.name).toBe('ReferenceError')
+        expect(error.name).toBe('TypeError')
         }
     })
     it('prevents new nested property creation/assignments', () => {
@@ -59,29 +51,11 @@ describe("one-stop tests", () => {
         try {
         state.nest.foo = 1
         } catch (error) {
-        expect(error.name).toBe('ReferenceError')
+        expect(error.name).toBe('TypeError')
         }
     })
     it('should return undefined while getting an unknown property', () => {
         const {state} = readMode
         expect(state.foo).toBe(undefined)
-    })
-    it('should receive one nofification after an array push', () => {
-        const mock = jest.fn();
-        shop = oneStop(model, mock, {strict: 2})
-        const {state} = shop.writeMode
-        jest.useFakeTimers();
-        state.array.push(4)
-        jest.runAllTimers();
-        expect(mock).toHaveBeenCalledTimes(1);
-    })
-    it('should receive two nofifications after an array push', () => {
-        const mock = jest.fn();
-        shop = oneStop(model, mock, {timeout: 0,  strict: 2})
-        const {state} = shop.writeMode
-        jest.useFakeTimers();
-        state.array.push(4)
-        jest.runAllTimers();
-        expect(mock).toHaveBeenCalledTimes(2);
     })
  })

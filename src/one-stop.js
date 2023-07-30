@@ -11,7 +11,7 @@ export default (model, notifyChanges, options) => {
         ... roFns
       },
       [WM] : {
-        state: nOptions.strictly === 2 ? ro : rw,
+        state: nOptions.strict ? ro : rw,
         ...roFns,
         ...rwFns
       }
