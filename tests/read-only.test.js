@@ -1,17 +1,17 @@
 import { jest } from '@jest/globals';
-import oneStop from '../../src/index.js'
-import model from '../model.js'
+import oneStop from '../src/index.js'
+import model from './model.js'
 const noop = () => {}
-let shop, readMode, writeMode
+let shop
 beforeEach (
   () => {
-    shop = oneStop(model, noop, {readOnly: true, strict: true})
+    shop = oneStop(model, noop, {readOnly: true})
   }
 )
-describe('readonly + strict tests', () => {
-    it ('should not read the state', () => {
+describe('readonly mode tests', () => {
+    it ('should read the state', () => {
         const {state} = shop
-        expect(state).toBeUndefined()
+        expect(state.count).toBe(0)
     })
     it ('should not update the state', () => {
         const {state} = shop

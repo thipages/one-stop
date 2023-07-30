@@ -2,7 +2,7 @@
 A simple state manager
 
 ## Principle
-`one-stop` wraps an object model (which can include root functions) and returns by default a `{readMode, writeMode}` object, each of it having a `state` property and all functions declared in the original object. `readMode` and `writeMode` can be seen as an access mode to the model
+`one-stop` wraps an object model (which can include root functions) and returns by default an object having a `state` property and all functions declared in the original object.
 
 `one-stop` accepts three arguments
 - a `model` which should declare mutations functions in a dedicated `actions` property
@@ -29,9 +29,7 @@ const model = {
   }
 }
 const notifyChanges = () => console.log('state updated')
-const {writeMode, readMode} = oneStop(initialState, notifyChanges)
-// writeMode is chosen
-const {state, increment, isZeroCount} = writeMode
+const {state, increment, isZeroCount} = oneStop(initialState, notifyChanges)
 // WRITING
 state.array.push('two') // prints "state updated"
 increment(1) // prints "state updated"
@@ -52,5 +50,6 @@ state.nest.foo = 1
 ## Options
 There are three options
 - `timeout`  (number)  : the minimum time after which `notify` function is called  (default 50ms)
-- `strict`   (boolean) : when true, the `state` property is not accessible (default : false)
-- `readOnly` (boolean) : when true, there are no more `readMode` and `writeMode` but a direct access to `readMode`
+- `readOnly` (boolean) : when true, the object is read-only  (default false)
+  - `actions` are not accessible
+  - `state` is read-only

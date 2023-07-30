@@ -4,21 +4,9 @@ import { readOnlyProxy, trackerProxy } from './proxy-handlers.js'
 import { isFunction } from './utils.js'
 export default (model, notifyFn, options) => {
     const {ro, rw, roFns, rwFns} = getPrimitives(model, notifyFn, options)
-    const strictR = {...roFns}
-    const fullR =  { state: ro, ...strictR }
-    const strictW = { ...roFns, ...rwFns }
-    const fullW = {state : rw, ...strictW}
     return options.readOnly
-      ? options.strict ? strictR : fullR
-      : options.strict
-        ? {
-          [RM]: strictR,
-          [WM]: strictW
-        }
-        : {
-          [RM]: fullR,
-          [WM]: fullW
-        }
+      ? { state: ro, ...roFns }
+      : {state : rw, ...roFns, ...rwFns}
   }
   function getPrimitives (initialModel, notifyFn, options) {
     const {state, computed, actions} = getModelParts(initialModel)
