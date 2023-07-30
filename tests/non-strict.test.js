@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import oneStop from '../../src/index.js'
-import model from './../model.js'
+import oneStop from '../src/index.js'
+import model from './model.js'
 let shop, readMode, writeMode
 beforeEach (
   () => {
