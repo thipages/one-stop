@@ -44,8 +44,8 @@ console.log(
   state.foo, // undefined
 )
 // Cannot create a new property (throw a TypeError)
-writeMode.foo = 1
-writeMode.nest.foo = 1
+state.foo = 1
+state.nest.foo = 1
 
 ```
 
