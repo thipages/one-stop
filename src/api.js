@@ -1,10 +1,10 @@
 import  {RM, WM} from './constants.js'
 import notifier from './notifier.js'
-import {normalizeOptions} from './normalize.js'
 import { readOnlyProxy, trackerProxy } from './proxy-handlers.js'
 import { isFunction } from './utils.js'
 export default (model, notifyChanges, options) => {
-    const {nOptions, ro, rw, roFns, rwFns} = theOne(model, notifyChanges, options)
+    const {options: nOptions, ro, rw, roFns, rwFns}
+      = getPrimitives(model, notifyChanges, options)
     return {
       [RM] : {
         state: ro,
@@ -17,19 +17,17 @@ export default (model, notifyChanges, options) => {
       }
     }
   }
-
-  function theOne (initialModel, notifyChanges, options) {
-    const {state, computed, actions} = toModelParts(initialModel)
-    const nOptions = normalizeOptions(options)
-    const notify = notifier (notifyChanges, nOptions.timeout)
+  function getPrimitives (initialModel, notifyChanges, options) {
+    const {state, computed, actions} = getModelParts(initialModel)
+    const notify = notifier (notifyChanges, options.timeout)
     //
     const ro = new Proxy(state, readOnlyProxy())
     const rw = new Proxy(state, trackerProxy(notify))
-    const roFns = applyToMany(computed, rw)
-    const rwFns = applyToMany(actions, rw)
-    return {nOptions, ro, rw, roFns, rwFns}
+    const roFns = applyContext(computed, rw)
+    const rwFns = applyContext(actions, rw)
+    return {options, ro, rw, roFns, rwFns}
   }
-  function toModelParts(model) {
+  function getModelParts(model) {
     const computed = {}
     const state = {}
     let actions = {}
@@ -44,7 +42,7 @@ export default (model, notifyChanges, options) => {
     }
     return {state: structuredClone(state), computed, actions}
   }
-  function applyToMany (fnObj, context) {
+  function applyContext (fnObj, context) {
     const res = {}
     for (const [key, fn] of Object.entries (fnObj)) {
       res[key] = function () {

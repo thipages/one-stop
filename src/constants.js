@@ -1,5 +1,5 @@
 const defaultOptions = {
-    timeout : 50,
+    timeout: 50,
     strictly: 1 // 1 or 2 allowed
 }
 const RM = 'readMode'

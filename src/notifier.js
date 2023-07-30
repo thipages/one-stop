@@ -1,5 +1,4 @@
 import {noop, isFunction} from './utils.js'
-
 export default function (notifyChanges, timeout) {
     const n = !isFunction(notifyChanges)
     ? noop
@@ -7,16 +6,16 @@ export default function (notifyChanges, timeout) {
         ? notifyChanges
         : postpone(notifyChanges, timeout)
     return n
-  }
-  function postpone(fn, timeout) {
+}
+function postpone(fn, timeout) {
     let timer
     return () => {
-      if (timer) return
-      timer = setTimeout (
+        if (timer) return
+        timer = setTimeout (
         () => {
-          clearTimeout(timer)
-          fn()
+            clearTimeout(timer)
+            fn()
         }, timeout
-      )
+        )
     }
-  }
+}

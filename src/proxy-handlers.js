@@ -13,7 +13,7 @@ export const readOnlyProxy = () => {
       }
     }
   }
-  export const trackerProxy = (notify) => {
+export const trackerProxy = (notify) => {
     return {
       get(target, key) {
         return typeof target[key] === 'object' && target[key] !== null
@@ -30,11 +30,11 @@ export const readOnlyProxy = () => {
         return false
       }
     }
-  }
-  function throwIfReferenceError(target, key) {
+}
+function throwIfReferenceError(target, key) {
     // https://stackoverflow.com/questions/39880064/proxy-index-gets-converted-to-string
     if (Array.isArray(target) && (key === 'length' || /\d+/.test(key))) return 
     if (!target.hasOwnProperty(key)) {
-      throw new ReferenceError('Unknown property: '+key);
+        throw new ReferenceError('Unknown property: ' + key);
     }
-  }
+}
