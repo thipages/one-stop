@@ -1,11 +1,8 @@
 import {noop, isFunction} from './utils.js'
-export default function (notifyChanges, timeout) {
-    const n = !isFunction(notifyChanges)
-    ? noop
-    : timeout === 0
-        ? notifyChanges
-        : postpone(notifyChanges, timeout)
-    return n
+export default function (notifyFn, timeout) {
+    return timeout <= 0
+        ? notifyFn
+        : postpone(notifyFn, timeout)
 }
 function postpone(fn, timeout) {
     let timer

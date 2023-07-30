@@ -7,6 +7,9 @@ export default  {
     isZeroCount() {
         return this.count === 0
     },
+    getCount() {
+      return this.count
+    },
     actions : {
       increment (inc) {
         this.count += inc

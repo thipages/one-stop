@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import oneStop from '../src/index.js'
-import model from './model.js'
+import oneStop from '../../src/index.js'
+import model from '../model.js'
 let shop, readMode, writeMode
 beforeEach (
   () => {
@@ -9,7 +9,7 @@ beforeEach (
     writeMode = shop.writeMode
   }
 )
-describe("one-stop tests", () => {
+describe("full + non-strict tests", () => {
   it('should update a non-nested primitive via state', () => {
     const {state} = writeMode
     state.count = 1
