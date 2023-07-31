@@ -35,19 +35,16 @@ const model = {
 }
 const notifyChanges = () => console.log('state updated')
 const {state, increment, isZeroCount} = oneStop(initialState, notifyChanges)
-// WRITING
-state.array.push('two') // prints "state updated"
-increment(1) // prints "state updated"
-// READING
+// WRITING (prints "state updated")
+state.array.push('two')
+increment(1)
+// READING (prints true 1 undefined)
 console.log(
-  isZeroCount(), // "true"
-  state.count, // 1
-  state.count, // 1 (same as above)
-  state.nest.count, 10
-  state.foo, // undefined
+  isZeroCount(),
+  state.count,
+  state.foo
 )
-// Cannot create a new property (throw a TypeError)
+// CREATING new property throws a TypeError
 state.foo = 1
-state.nest.foo = 1
 
 ```
