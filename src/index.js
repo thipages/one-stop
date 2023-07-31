@@ -1,10 +1,9 @@
 import {noop, isFunction} from './utils.js'
-import {defaultOptions} from './constants.js'
-import create from './one-stop.js'
+import oneStop from './one-stop.js'
 export default (model, notifyFn, timeout=50) => {
   return isFunction(notifyFn)
-    ? create (model, notifyFn, timeout)
-    : create (model, noop, -1)
+    ? oneStop (model, notifyFn, timeout, false)
+    : oneStop (model, noop, timeout, true)
 }
 
 

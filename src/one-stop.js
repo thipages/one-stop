@@ -1,17 +1,17 @@
-import  {RM, WM} from './constants.js'
 import notifier from './notifier.js'
 import { readOnlyProxy, trackerProxy } from './proxy-handlers.js'
-import { isFunction } from './utils.js'
-export default (model, notifyFn, timeout) => {
-    const {ro, rw, roFns, rwFns} = getPrimitives(model, notifyFn, timeout)
-    return timeout < 0
-      ? { state: ro, ...roFns }
-      : {state : rw, ...roFns, ...rwFns}
-  }
-  function getPrimitives (initialModel, notifyFn, timeout) {
-    const {state, computed, actions} = getModelParts(initialModel)
-    const notify = notifier (notifyFn, timeout)
-    //
+import { isFunction, noop } from './utils.js'
+export default (model, notifyFn, timeout, isReadOnly) => {
+  const notify = isReadOnly
+    ? noop
+    : notifier (notifyFn, timeout)
+  const {ro, rw, roFns, rwFns} = getPrimitives(model, notify, isReadOnly)
+  return isReadOnly
+    ? { state: ro, ...roFns }
+    : {state : rw, ...roFns, ...rwFns}
+}
+  function getPrimitives (model, notify) {
+    const {state, computed, actions} = getModelParts(model)
     const ro = new Proxy(state, readOnlyProxy())
     const rw = new Proxy(state, trackerProxy(notify))
     const roFns = createContextualFns(computed, rw)
