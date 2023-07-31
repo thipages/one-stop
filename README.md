@@ -38,7 +38,7 @@ const {state, increment, isZeroCount} = oneStop(initialState, notifyChanges)
 // WRITING (prints "state updated")
 state.array.push('two')
 increment(1)
-// READING (prints true 1 undefined)
+// READING (prints false 1 undefined)
 console.log(
   isZeroCount(),
   state.count,
