@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "build": "npm run rollup:esm &&  npm run rollup:esm_min",
+    "rollup:esm_min": "rollup --config rollup/rollup.config_esm_min.js",
+    "rollup:esm": "rollup --config rollup/rollup.config_esm.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,9 @@
   },
   "homepage": "https://github.com/thipages/one-stop#readme",
   "devDependencies": {
-    "jest": "^29.6.1"
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "jest": "^29.6.1",
+    "rollup": "^3.27.0"
   }
 }
