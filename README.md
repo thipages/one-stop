@@ -14,7 +14,7 @@ As Read-Only Mode
 - the `actions` as not acessible
 - the state is read-only
 
-## Example (default options)
+## Example (Write Mode)
 
 ```javascript
 import oneStop from 'one-stop'
