@@ -2,7 +2,7 @@ const noop = () => {};
 const isFunction = (f) => typeof f === 'function';
 
 function notifier (notifyFn, timeout) {
-    return timeout <= 0
+    return timeout === 0
         ? notifyFn
         : postpone(notifyFn, timeout)
 }
@@ -60,16 +60,17 @@ function throwIfReferenceError(target, key) {
     }
 }
 
-var create = (model, notifyFn, timeout) => {
-    const {ro, rw, roFns, rwFns} = getPrimitives(model, notifyFn, timeout);
-    return timeout < 0
-      ? { state: ro, ...roFns }
-      : {state : rw, ...roFns, ...rwFns}
-  };
-  function getPrimitives (initialModel, notifyFn, timeout) {
-    const {state, computed, actions} = getModelParts(initialModel);
-    const notify = notifier (notifyFn, timeout);
-    //
+var oneStop = (model, notifyFn, timeout, isReadOnly) => {
+  const notify = isReadOnly
+    ? noop
+    : notifier (notifyFn, timeout);
+  const {ro, rw, roFns, rwFns} = getPrimitives(model, notify);
+  return isReadOnly
+    ? { state: ro, ...roFns }
+    : {state : rw, ...roFns, ...rwFns}
+};
+  function getPrimitives (model, notify) {
+    const {state, computed, actions} = getModelParts(model);
     const ro = new Proxy(state, readOnlyProxy());
     const rw = new Proxy(state, trackerProxy(notify));
     const roFns = createContextualFns(computed, rw);
@@ -103,8 +104,8 @@ var create = (model, notifyFn, timeout) => {
 
 var index = (model, notifyFn, timeout=50) => {
   return isFunction(notifyFn)
-    ? create (model, notifyFn, timeout)
-    : create (model, noop, -1)
+    ? oneStop (model, notifyFn, timeout, false)
+    : oneStop (model, noop, timeout, true)
 };
 
 export { index as default };
