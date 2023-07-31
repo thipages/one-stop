@@ -4,10 +4,15 @@ A simple state manager
 ## Principle
 `one-stop` wraps an object model (which can include root functions) and returns by default an object having a `state` property and all functions declared in the original object.
 
-`one-stop` accepts three arguments
-- a `model` which should declare mutations functions in a dedicated `actions` property
-- a `notify` function which is called after any changes (in the timeframe of `timeout` option)
-- a `options` parameter (optional)
+As Write Mode, `one-stop` accepts three arguments
+- `model` object which should declare mutations functions in a dedicated `actions` property
+- `notify` function which is called after any changes (in the timeframe of `timeout` option)
+- `timeout` number being the maximum time after which `notify` function is called  (optional, default: 50ms)
+
+As Read-Only Mode
+- `one-stop` accepts only the `model` as argument
+- the `actions` as not acessible
+- the state is read-only
 
 ## Example (default options)
 
@@ -46,10 +51,3 @@ state.foo = 1
 state.nest.foo = 1
 
 ```
-
-## Options
-There are three options
-- `timeout`  (number)  : the minimum time after which `notify` function is called  (default 50ms)
-- `readOnly` (boolean) : when true, the object is read-only  (default false)
-  - `actions` are not accessible
-  - `state` is read-only

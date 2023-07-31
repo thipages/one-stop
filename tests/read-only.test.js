@@ -1,11 +1,10 @@
 import { jest } from '@jest/globals';
 import oneStop from '../src/index.js'
 import model from './model.js'
-const noop = () => {}
 let shop
 beforeEach (
   () => {
-    shop = oneStop(model, noop, {readOnly: true})
+    shop = oneStop(model) // signature for read-only
   }
 )
 describe('readonly mode tests', () => {

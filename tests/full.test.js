@@ -1,10 +1,11 @@
 import { jest } from '@jest/globals';
 import oneStop from '../src/index.js'
 import model from './model.js'
-let shop, readMode, writeMode
+const noop = () => {}
+let shop
 beforeEach (
   () => {
-    shop = oneStop(model)
+    shop = oneStop(model, noop)
   }
 )
 describe("full mode tests", () => {
@@ -72,7 +73,7 @@ describe("full mode tests", () => {
   })
   it('should receive two nofifications after an array push', () => {
     const mock = jest.fn();
-    shop = oneStop(model, mock, {timeout: 0})
+    shop = oneStop(model, mock, 0)
     const {state} = shop
     jest.useFakeTimers();
     state.array.push(4)
